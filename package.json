@@ -1,0 +1,11 @@
+{
+  "name": "proof-of-concept",
+  "version": "1.0.0",
+  "description": "Hyperledger Composer, proof of Concept",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jamie Knoef",
+  "license": "ISC"
+}
