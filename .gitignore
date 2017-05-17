@@ -1,3 +1,4 @@
-/node_modules
+node_modules
+logs
 .idea
 Proof of concept.iml
