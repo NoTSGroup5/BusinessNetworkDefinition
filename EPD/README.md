@@ -1,4 +1,4 @@
-## Creating business network definition
+### Creating business network definition
 
 ```
 composer archive create --sourceType dir --sourceName .

@@ -1,9 +1,14 @@
 {
-  "name": "EPD",
+  "name": "epd",
   "version": "0.0.1",
   "description": "Awesome EPD system business network definition",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "startHLF": "scripts/start-hyperledger.sh",
+    "stopHLF": "scripts/stop-hyperledger.sh",
+    "teardownHLF": "scripts/teardown.sh",
+    "deployNetwork": "composer archive create --sourceType dir --sourceName . && composer network deploy --archiveFile epd@0.0.1.bna  -p defaultProfile -i admin -s adminpw",
+    "postinstall": "scripts/download-hyperledger.sh && npm run startHLF && npm run deployNetwork"
   },
   "author": "Jamie Knoef",
   "license": "Apache-2",
