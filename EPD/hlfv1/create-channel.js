@@ -71,46 +71,48 @@ hfc.newDefaultKeyValueStore({
     path: keystore
 })
     .then((store) => {
-        client.setStateStore(store);
+    client.setStateStore(store);
 
-        // get the admin id for org1 and enroll them if not already enrolled
-        return testUtil.getSubmitter(client, 'org1');
-    })
-    .then((admin) => {
-        console.log('Successfully enrolled user \'admin\'');
+// get the admin id for org1 and enroll them if not already enrolled
+return testUtil.getSubmitter(client, 'org1');
+}).catch(function(err){
+    console.log(err);
+})
+.then((admin) => {
+    console.log('Successfully enrolled user \'admin\'');
 
-        // readin the envelope to send to the orderer
-        return testUtil.readFile('./mychannel.tx');
-    }, (err) => {
-        console.log('Failed to enroll user \'admin\'. ' + err);
-        throw new Error('failed to enroll user');
-    })
-    .then((data) => {
-        console.log('Successfully read file');
-        let request = {
-            envelope: data
-        };
-        // send to orderer
-        return chain.createChannel(request);
-    }, (err) => {
-        console.log('Failed to read file for channel template: ' + err);
-        throw new Error('failed to read channel creation transaction');
-    })
-    .then((response) => {
-        logger.debug(' response ::%j', response);
+// readin the envelope to send to the orderer
+return testUtil.readFile('./mychannel.tx');
+}, (err) => {
+    console.log('Failed to enroll user \'admin\'. ' + err);
+    throw new Error('failed to enroll user');
+})
+.then((data) => {
+    console.log('Successfully read file');
+let request = {
+    envelope: data
+};
+// send to orderer
+return chain.createChannel(request);
+}, (err) => {
+    console.log('Failed to read file for channel template: ' + err);
+    throw new Error('failed to read channel creation transaction');
+})
+.then((response) => {
+    logger.debug(' response ::%j', response);
 
-        if (response && response.status === 'SUCCESS') {
-            console.log('Successfully created the channel.');
-            return testUtil.sleep(5000);
-        } else {
-            console.log('Failed to create the channel. ');
-            throw new Error('failed to create channel');
-        }
-    }, (err) => {
-        console.log('Failed to initialize the channel: ' + err.stack ? err.stack : err);
-        throw new Error('failed to initialize the channel');
-    })
-    .then((nothing) => {
-        console.log('Successfully waited to make sure new channel was created.');
-    }, (err) => {
-    });
+if (response && response.status === 'SUCCESS') {
+    console.log('Successfully created the channel.');
+    return testUtil.sleep(5000);
+} else {
+    console.log('Failed to create the channel. ');
+    throw new Error('failed to create channel');
+}
+}, (err) => {
+    console.log('Failed to initialize the channel: ' + err.stack ? err.stack : err);
+    throw new Error('failed to initialize the channel');
+})
+.then((nothing) => {
+    console.log('Successfully waited to make sure new channel was created.');
+}, (err) => {
+});

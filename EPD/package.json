@@ -13,14 +13,20 @@
   "author": "Jamie Knoef",
   "license": "Apache-2",
   "devDependencies": {
-    "composer-admin": "latest",
-    "composer-client": "latest",
-    "composer-connector-embedded": "latest",
-    "browserfs": "latest",
-    "chai": "latest",
-    "eslint": "latest",
-    "istanbul": "latest",
-    "mkdirp": "latest",
-    "mocha": "latest"
+    "cli-table": "^0.3.1",
+    "composer-admin": "^0.5.10",
+    "composer-client": "^0.5.10",
+    "config": "^1.24.0",
+    "jsonfile": "^2.4.0",
+    "lodash": "^4.17.4",
+    "sprintf-js": "^1.0.3",
+    "winston": "^2.3.0",
+    "yargs": "^6.5.0",
+    "composer-connector-embedded": "^0.5.0"
+  },
+  "dependencies": {
+    "fabric-ca-client": "1.0.0-alpha.0",
+    "fabric-client": "1.0.0-alpha",
+    "homedir": "^0.6.0"
   }
 }

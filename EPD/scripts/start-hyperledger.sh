@@ -9,9 +9,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 #
 cd "${DIR}"/hlfv1
 
-docker-compose -f hlfv1_alpha-docker-compose.yml down
-docker-compose -f hlfv1_alpha-docker-compose.yml kill
-docker-compose -f hlfv1_alpha-docker-compose.yml up -d
+docker-compose -f docker-compose.yml down
+docker-compose -f docker-compose.yml kill
+docker-compose -f docker-compose.yml up -d
 
 node create-channel.js
 node join-channel.js
