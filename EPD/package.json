@@ -4,6 +4,7 @@
   "description": "Awesome EPD system business network definition",
   "scripts": {
     "test": "mocha --recursive",
+    "download": "scripts/download-hyperledger.sh",
     "startHLF": "scripts/start-hyperledger.sh",
     "stopHLF": "scripts/stop-hyperledger.sh",
     "teardownHLF": "scripts/teardown.sh",
