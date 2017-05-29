@@ -9,7 +9,8 @@
     "stopHLF": "scripts/stop-hyperledger.sh",
     "teardownHLF": "scripts/teardown.sh",
     "deployNetwork": "composer archive create --sourceType dir --sourceName . && composer network deploy --archiveFile epd@0.0.1.bna  -p defaultProfile -i admin -s adminpw",
-    "postinstall": "scripts/download-hyperledger.sh && npm run startHLF && npm run deployNetwork"
+    "postinstall": "scripts/download-hyperledger.sh && npm run startHLF && npm run deployNetwork",
+    "rest": "composer-rest-server -n epd -p defaultProfile -i admin -s adminpw -N never -P 3000"
   },
   "author": "Jamie Knoef",
   "license": "Apache-2",
