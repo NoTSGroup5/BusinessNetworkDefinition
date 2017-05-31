@@ -93,9 +93,14 @@ participant HealthCareProfessional identified by bsn {
   o String lastName
 }
 
-transaction PatientCreate identified by transactionId{
+transaction PatientCreate identified by bsn{
+  o String bsn
+  o Patient patient
+}
+
+transaction OrganisationCreateType identified by transactionId{
   o String transactionId
-  --> Patient patient
+  --> OrganisationType type
 }
 
 /**
