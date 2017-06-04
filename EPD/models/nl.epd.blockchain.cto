@@ -7,12 +7,12 @@ namespace nl.epd.blockchain
 asset MedicalFile identified by bsn {
   o String                      bsn
   --> Patient                   owner
-  --> Patient[]                 mentors optional
-  o OrganisationPermission[]  permissions optional
-  o Visit[]                   visits optional
-  o String[]                  allergies optional
-  o Treatment[]               treatments optional
-  o Medicine[]                medicine optional
+  --> Patient[]                 mentors
+  o OrganisationPermission[]  permissions
+  o Visit[]                   visits
+  o String[]                  allergies
+  o Treatment[]               treatments
+  o Medicine[]                medicine
 }
 
 asset Medicine identified by id {
