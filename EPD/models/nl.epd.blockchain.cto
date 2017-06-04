@@ -4,8 +4,8 @@
 
 namespace nl.epd.blockchain
 
-asset MedicalFile identified by id {
-  o String                      id
+asset MedicalFile identified by bsn {
+  o String                      bsn
   --> Patient                   owner
   --> Patient[]                 mentors
   o OrganisationPermission[]  permissions

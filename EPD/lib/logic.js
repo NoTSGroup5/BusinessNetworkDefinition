@@ -25,51 +25,39 @@ function PatientCreate(item) {
     newPatient.houseNumber = item.patient.houseNumber;
     newPatient.houseNumberExtra = item.patient.houseNumberExtra;
 
-    var then = function (medicalFileRegistry) {
-        var medicalFile = factory.newResource(namespace, 'MedicalFile', "test");
-        medicalFile.id = "test";
-        medicalFile.owner = newPatient.bsn;
-        medicalFile.mentors = [];
-        medicalFile.permissions = [];
-        medicalFile.allergies = [];
-        medicalFile.treatments = [];
-        medicalFile.medicine = [];
-
-        return medicalFileRegistry.add(medicalFile);
-    }.bind(this);
-
 
     return getParticipantRegistry(namespace + '.Patient')
-        .then(function (patientRegistry) {return patientRegistry.addAll([newPatient]);})
-        .then(function(){return getAssetRegistry(namespace + ".MedicalFile")})
-        .then( function (medicalFileRegistry) {
-            var factory = getFactory();
-
+        .then(function (patientRegistry) {
+            return patientRegistry.add(newPatient);
+        }).then(function() {
+            return getAssetRegistry('nl.epd.blockchain.MedicalFile');
+        }).then(function (registry) {
             var medicalFile = factory.newResource(namespace, 'MedicalFile', "test");
-            medicalFile.id = "test";
-            medicalFile.owner = newPatient.bsn;
+            medicalFile.bsn = newPatient.bsn; // todo: fix this
+            medicalFile.owner = factory.newRelationship(namespace, 'Patient', newPatient.bsn);
             medicalFile.mentors = [];
             medicalFile.permissions = [];
             medicalFile.allergies = [];
             medicalFile.treatments = [];
             medicalFile.medicine = [];
+            medicalFile.visits = [];
 
-            return medicalFileRegistry.add(medicalFile);
+            return registry.add(medicalFile);
         });
 }
 
 /*function publish(publishBond) {
 
-    return getAssetRegistry('org.acme.bond.BondAsset')
-        .then(function (registry) {
-            var factory = getFactory();
-// Create the bond asset.
-            var bondAsset = factory.newResource('org.acme.bond', 'BondAsset', publishBond.ISINCode);
-            bondAsset.bond = publishBond.bond;
-// Add the bond asset to the registry.
-            return registry.add(bondAsset);
-        });
-}*/
+ return getAssetRegistry('org.acme.bond.BondAsset')
+ .then(function (registry) {
+ var factory = getFactory();
+ // Create the bond asset.
+ var bondAsset = factory.newResource('org.acme.bond', 'BondAsset', publishBond.ISINCode);
+ bondAsset.bond = publishBond.bond;
+ // Add the bond asset to the registry.
+ return registry.add(bondAsset);
+ });
+ }*/
 
 /**
  * Create a new organisation type
@@ -79,20 +67,20 @@ function PatientCreate(item) {
 
 /*function OrganisationCreateType(type){
 
-}*/
+ }*/
 
 /*
-function onPatientCreate() {
-    var assetRegistry;
-    var id = changeAssetValue.relatedAsset.assetId;
-    var value = changeAssetValue.relatedAsset.newValue;
-    return getAssetRegistry('nl.epd.blockchain.Asset')
-    .then(function(ar) {
-        assetRegistry = ar;
-        return assetRegistry.get(id)
-    })
-    .then(function(asset) {
-        asset.value = changeAssetValue.newValue;
-        return assetRegistry.update(asset);
-    });
-}*/
+ function onPatientCreate() {
+ var assetRegistry;
+ var id = changeAssetValue.relatedAsset.assetId;
+ var value = changeAssetValue.relatedAsset.newValue;
+ return getAssetRegistry('nl.epd.blockchain.Asset')
+ .then(function(ar) {
+ assetRegistry = ar;
+ return assetRegistry.get(id)
+ })
+ .then(function(asset) {
+ asset.value = changeAssetValue.newValue;
+ return assetRegistry.update(asset);
+ });
+ }*/
