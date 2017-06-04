@@ -1,45 +1,86 @@
 'use strict';
-/**
- * Write your transction processor functions here
- */
 
-function onPatientCreate(patient) {
+/**
+ * Create a new patient
+ * @param {nl.epd.blockchain.PatientCreate} item - Create a patient
+ * @transaction
+ */
+function PatientCreate(item) {
     var namespace = "nl.epd.blockchain";
     var factory = getFactory();
 
-    var newPatient = factory.newResource(namespace, 'Patient', patient.bsn);
+    var newPatient = factory.newResource(namespace, 'Patient', item.patient.bsn);
 
-    newPatient.bsn = patient.bsn;
-    newPatient.firstName = patient.firstName;
-    newPatient.namePrefix = patient.namePrefix;
-    newPatient.lastName = patient.lastName;
-    newPatient.email = patient.email;
-    newPatient.telephoneNumber = patient.telephoneNumber;
-    newPatient.birthday = patient.birthday;
-    newPatient.gender = patient.gender;
-    newPatient.city = patient.city;
-    newPatient.zipCode = patient.zipCode;
-    newPatient.street = patient.street;
-    newPatient.houseNumber = patient.houseNumber;
-    newPatient.houseNumberExtra = patient.houseNumberExtra;
+    newPatient.bsn = item.patient.bsn;
+    newPatient.firstName = item.patient.firstName;
+    newPatient.namePrefix = item.patient.namePrefix;
+    newPatient.lastName = item.patient.lastName;
+    newPatient.email = item.patient.email;
+    newPatient.telephoneNumber = item.patient.telephoneNumber;
+    newPatient.birthday = item.patient.birthday;
+    newPatient.gender = item.patient.gender;
+    newPatient.city = item.patient.city;
+    newPatient.zipCode = item.patient.zipCode;
+    newPatient.street = item.patient.street;
+    newPatient.houseNumber = item.patient.houseNumber;
+    newPatient.houseNumberExtra = item.patient.houseNumberExtra;
 
-    return getParticipantRegistry(namespace + '.Patient').then(function (patientRegistry) {
-        patientRegistry.addAll([newPatient]);
-    });
+
+    return getParticipantRegistry(namespace + '.Patient')
+        .then(function (patientRegistry) {
+            return patientRegistry.add(newPatient);
+        }).then(function() {
+            return getAssetRegistry('nl.epd.blockchain.MedicalFile');
+        }).then(function (registry) {
+            var medicalFile = factory.newResource(namespace, 'MedicalFile', "test");
+            medicalFile.bsn = newPatient.bsn; // todo: fix this
+            medicalFile.owner = factory.newRelationship(namespace, 'Patient', newPatient.bsn);
+            medicalFile.mentors = [];
+            medicalFile.permissions = [];
+            medicalFile.allergies = [];
+            medicalFile.treatments = [];
+            medicalFile.medicine = [];
+            medicalFile.visits = [];
+
+            return registry.add(medicalFile);
+        });
 }
 
+/*function publish(publishBond) {
+
+ return getAssetRegistry('org.acme.bond.BondAsset')
+ .then(function (registry) {
+ var factory = getFactory();
+ // Create the bond asset.
+ var bondAsset = factory.newResource('org.acme.bond', 'BondAsset', publishBond.ISINCode);
+ bondAsset.bond = publishBond.bond;
+ // Add the bond asset to the registry.
+ return registry.add(bondAsset);
+ });
+ }*/
+
+/**
+ * Create a new organisation type
+ * @param {nl.epd.blockchain.OrganisationType} organisation type - Create a new organisation type
+ * @transaction
+ */
+
+/*function OrganisationCreateType(type){
+
+ }*/
+
 /*
-function onPatientCreate() {
-    var assetRegistry;
-    var id = changeAssetValue.relatedAsset.assetId;
-    var value = changeAssetValue.relatedAsset.newValue;
-    return getAssetRegistry('nl.epd.blockchain.Asset')
-    .then(function(ar) {
-        assetRegistry = ar;
-        return assetRegistry.get(id)
-    })
-    .then(function(asset) {
-        asset.value = changeAssetValue.newValue;
-        return assetRegistry.update(asset);
-    });
-}*/
+ function onPatientCreate() {
+ var assetRegistry;
+ var id = changeAssetValue.relatedAsset.assetId;
+ var value = changeAssetValue.relatedAsset.newValue;
+ return getAssetRegistry('nl.epd.blockchain.Asset')
+ .then(function(ar) {
+ assetRegistry = ar;
+ return assetRegistry.get(id)
+ })
+ .then(function(asset) {
+ asset.value = changeAssetValue.newValue;
+ return assetRegistry.update(asset);
+ });
+ }*/
