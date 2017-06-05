@@ -32,7 +32,7 @@ function PatientCreate(item) {
         }).then(function() {
             return getAssetRegistry('nl.epd.blockchain.MedicalFile');
         }).then(function (registry) {
-            var medicalFile = factory.newResource(namespace, 'MedicalFile', "test");
+            var medicalFile = factory.newResource(namespace, 'MedicalFile', newPatient.bsn);
             medicalFile.bsn = newPatient.bsn; // todo: fix this
             medicalFile.owner = factory.newRelationship(namespace, 'Patient', newPatient.bsn);
             medicalFile.mentors = [];

@@ -1,0 +1,17 @@
+rule PatientViewOwnRecord {
+    description: "A patient is only allowed to read his own medical records"
+    participant(m): "nl.epd.blockchain.Patient"
+    operation: READ
+    resource(v): "nl.epd.blockchain.MedicalFile"
+    condition: (v.owner.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule PatientViewContactInformation {
+    description: "A patient is allowed to read his own contact information"
+    participant(o): "nl.epd.blockchain.Patient"
+    operation: READ
+    resource(d): "nl.epd.blockchain.Patient"
+    condition: (o == d)
+    action: ALLOW
+}
