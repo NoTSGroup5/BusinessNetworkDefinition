@@ -11,6 +11,8 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/peerOrg1/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerOrg1
+    networks:
+      - default
 
   orderer0:
     container_name: orderer0
@@ -33,11 +35,12 @@ services:
     ports:
       - 7050:7050
     volumes:
-        - ./:/etc/hyperledger/configtx
-        - ./crypto-config/ordererOrganizations/ordererOrg1/orderers/ordererOrg1orderer1/:/etc/hyperledger/msp/orderer
+      - ./:/etc/hyperledger/configtx
+      - ./crypto-config/ordererOrganizations/ordererOrg1/orderers/ordererOrg1orderer1/:/etc/hyperledger/msp/orderer
 #        - ./tls/orderer:/etc/hyperledger/tls/orderer
 #        - ./tls/peers:/etc/hyperledger/tls/peers
-
+    networks:
+      - default
   peer0:
     container_name: peer0
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha
@@ -72,6 +75,8 @@ services:
 #        - ./tls/peers/peer0:/etc/hyperledger/tls
     depends_on:
       - orderer0
+    networks:
+      -default
 
   peer1:
     container_name: peer1
@@ -107,5 +112,9 @@ services:
     depends_on:
       - orderer0
       - peer0
+    networks:
+      - default
 
-
+networks:
+  default:
+    driver: overlay
