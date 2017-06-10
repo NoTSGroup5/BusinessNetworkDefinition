@@ -1,3 +1,19 @@
+rule PatientViewOrganisations {
+    description: "A patient is allowed to view all organisations"
+    participant: "nl.epd.blockchain.Patient"
+    operation: READ
+    resource: "nl.epd.blockchain.Organisation"
+    action: ALLOW
+}
+
+rule HealthCareProfessionalViewOrganisations {
+    description: "A health care professional is allowed to view all organisations"
+    participant: "nl.epd.blockchain.HealthCareProfessional"
+    operation: READ
+    resource: "nl.epd.blockchain.Organisation"
+    action: ALLOW
+}
+
 rule PatientViewOwnRecord {
     description: "A patient is only allowed to read his own medical records"
     participant(m): "nl.epd.blockchain.Patient"
@@ -7,11 +23,93 @@ rule PatientViewOwnRecord {
     action: ALLOW
 }
 
-rule PatientViewContactInformation {
-    description: "A patient is allowed to read his own contact information"
-    participant(o): "nl.epd.blockchain.Patient"
-    operation: READ
-    resource(d): "nl.epd.blockchain.Patient"
-    condition: (o == d)
+rule PatientUpdateOwnContact {
+    description: "A patient is allowed to update his contact information"
+    participant(m): "nl.epd.blockchain.Patient"
+    operation: UPDATE
+    resource(v): "nl.epd.blockchain.Patient"
+    condition: (v.getIdentifier() == m.getIdentifier())
     action: ALLOW
+}
+
+rule PatientUpdateOwnRecord {
+    description: "A patient is allowed to update his medical record"
+    participant(m): "nl.epd.blockchain.Patient"
+    operation: UPDATE
+    resource(v): "nl.epd.blockchain.MedicalFile"
+    condition: (v.owner.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule PatientAddMentor {
+    description: "A patient is allowed to add mentors"
+    participant(p): "nl.epd.blockchain.Patient"
+    operation: UPDATE
+    resource(m): "nl.epd.blockchain.MedicalFile.mentors"
+    condition: (m.owner.getIdentifier() == p.getIdentifier())
+    action: ALLOW
+}
+
+rule PatientMayViewPatients {
+    description: "A patient may lookup other patients"
+    participant: "nl.epd.blockchain.Patient"
+    operation: READ
+    resource: "nl.epd.blockchain.Patient"
+    action: ALLOW
+}
+
+rule HealthCareProfessionalViewPatients {
+   description: "A health care professional may lookup patients"
+   participant: "nl.epd.blockchain.HealthCareProfessional"
+   operation: READ
+   resource: "nl.epd.blockchain.Patient"
+   action: ALLOW
+}
+
+rule OrganisationMedicalFileReadPermission {
+   description: "An organisation may view a medical file which they have permission from"
+   participant(h): "nl.epd.blockchain.HealthCareProfessional"
+   operation: READ
+   resource(m): "nl.epd.blockchain.MedicalFile"
+   condition: (
+     m.organisations.some(function (organisation) {
+        return organisation.getIdentifier() === h.organisation.getIdentifier()
+    })
+   )
+   action: ALLOW
+}
+
+rule OrganisationMedicalFileUpdatePermission {
+   description: "An organisation may view a medical file which they have permission from"
+   participant(h): "nl.epd.blockchain.HealthCareProfessional"
+   operation: UPDATE
+   resource(m): "nl.epd.blockchain.MedicalFile"
+   condition: (
+     m.organisations.some(function (organisation) {
+        return organisation.getIdentifier() === h.organisation.getIdentifier()
+    })
+   )
+   action: ALLOW
+}
+
+rule HealthCareProfessional {
+    description: "A health care professional may view his data"
+    participant(h): "nl.epd.blockchain.HealthCareProfessional"
+    operation: READ
+    resource(r): "nl.epd.blockchain.HealthCareProfessional"
+    condition: (h.getIdentifier() == r.getIdentifier())
+    action: ALLOW
+}
+
+rule MentorViewMedicalFile {
+   description: "A mentor may view medical files he has permission to"
+   participant(p): "nl.epd.blockchain.Patient"
+   operation: READ
+   resource(m): "nl.epd.blockchain.MedicalFile"
+   condition: (
+     m.mentors.some(function (mentor) {
+        return mentor.getIdentifier() === p.getIdentifier()
+    })
+   )
+   action: ALLOW
 }

@@ -5,21 +5,21 @@
 namespace nl.epd.blockchain
 
 asset MedicalFile identified by bsn {
-  o String                      bsn
-  --> Patient                   owner
-  --> Patient[]                 mentors
-  o OrganisationPermission[]  permissions
-  o Visit[]                   visits
-  o String[]                  allergies
-  o Treatment[]               treatments
-  o Medicine[]                medicine
+  o String                    bsn
+  --> Patient                 owner
+  --> Patient[]               mentors optional
+  --> Organisation[]          organisations optional
+  o Visit[]                   visits optional
+  o String[]                  allergies optional
+  o Treatment[]               treatments optional
+  o Medicine[]                medicine optional
 }
 
 asset Medicine identified by id {
   o String id
   o String name
   o Integer startDate
-  o Integer endDate
+  o Integer endDate optional
   o String reason
   o String dosage
 }
@@ -34,7 +34,7 @@ asset Visit identified by id {
 asset Treatment identified by id {
   o String id
   o Integer startDate
-  o Integer endDate
+  o Integer endDate optional
   o String description
   o TreatmentLog[] logs
 }
@@ -62,14 +62,6 @@ asset OrganisationType identified by id {
   o String description
 }
 
-asset OrganisationPermission identified by id {
-  o String id
-  --> Organisation organisation
-  o Boolean read
-  o Boolean write
-  o Boolean del
-}
-
 participant Patient identified by bsn {
   o String bsn
   o String firstName
@@ -91,6 +83,7 @@ participant HealthCareProfessional identified by bsn {
   o String firstName
   o String namePrefix optional
   o String lastName
+  --> Organisation organisation
 }
 
 transaction PatientCreate identified by bsn{
@@ -98,24 +91,12 @@ transaction PatientCreate identified by bsn{
   o Patient patient
 }
 
-transaction OrganisationCreateType identified by transactionId{
+/*
+
+transaction MedicalFileAddVisit identified by transactionId{
   o String transactionId
-  --> OrganisationType type
+  o String bsn
+  o String description
 }
 
-/**
-participant User identified by email {
-  o String email
-}
-
-asset Asset identified by assetId {
-  o String assetId
-  o String value
-}
-
-transaction ChangeAssetValue identified by transactionId {
-  o String transactionId
-  o String newValue
-  --> Asset relatedAsset
-}
 */

@@ -41,7 +41,63 @@ function PatientCreate(item) {
             medicalFile.treatments = [];
             medicalFile.medicine = [];
             medicalFile.visits = [];
+            medicalFile.organisations = [];
 
             return registry.add(medicalFile);
         });
 }
+
+/*function MedicalFileAddVisit(item) {
+ var factory = getFactory();
+
+ var namespace = "nl.epd.blockchain";
+
+ var bsn = getCurrentParticipant().getIdentifier();
+
+ var medicalFileRegistry = null;
+ var medicalFile = null;
+
+ return validateHealthCareProfessionalPermission(namespace, item, bsn).then(function () {
+ return getAssetRegistry(namespace + '.MedicalFile');
+ }).then(function(pMedicalFileRegistry){
+ medicalFileRegistry = pMedicalFileRegistry;
+ return medicalFileRegistry.get(item.bsn);
+ }).then(function (pMedicalFile) {
+ medicalFile = pMedicalFile;
+ return getParticipantRegistry(namespace + '.HealthCareProfessional');
+ }).then(function (healthCareProfessionalRegistry) {
+ return healthCareProfessionalRegistry.get(bsn);
+ }).then(function (healthCareProfessional) {
+
+ var visit = factory.newResource(namespace, 'Visit', "1");
+ visit.id = "1";
+ visit.description = "testing";
+ visit.date = new Date().getTime();
+ visit.organisation = factory.newRelationship(namespace, 'Organisation', healthCareProfessional.organisation.getIdentifier());
+
+ medicalFile.visits.push(visit);
+
+ return medicalFileRegistry.update(medicalFile);
+ });
+ }*/
+
+/*function validateHealthCareProfessionalPermission(namespace, medicalFileAddVisit, bsn) {
+    var medicalFile = null;
+
+    return getAssetRegistry(namespace + '.MedicalFile').then(function(medicalFileRegistry){
+        return medicalFileRegistry.get(medicalFileAddVisit.bsn);
+    }).then(function (asset) {
+        medicalFile = asset;
+        return getParticipantRegistry(namespace + '.HealthCareProfessional');
+    }).then(function (healthCareProfessionalRegistry) {
+        return healthCareProfessionalRegistry.get(bsn);
+    }).then(function(healthCareProfessional){
+        var hasPermission = medicalFile.organisations.some(function (organisation) {
+            return organisation.getIdentifier() === healthCareProfessional.organisation.getIdentifier();
+        });
+        
+        if(!hasPermission){
+            throw new Error('The professional: ' + bsn + ' has no permission to access this medical file.');
+        }
+    });
+}*/
