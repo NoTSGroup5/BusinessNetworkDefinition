@@ -62,6 +62,13 @@ asset OrganisationType identified by id {
   o String description
 }
 
+participant GovernmentEmployee identified by bsn {
+  o String bsn
+  o String firstName
+  o String namePrefix optional
+  o String lastName
+}
+
 participant Patient identified by bsn {
   o String bsn
   o String firstName
@@ -69,7 +76,7 @@ participant Patient identified by bsn {
   o String lastName
   o String email
   o String telephoneNumber
-  o String birthday
+  o Integer birthday
   o String gender
   o String city
   o String zipCode

@@ -1,14 +1,8 @@
+/* Patients */
+
 rule PatientViewOrganisations {
     description: "A patient is allowed to view all organisations"
     participant: "nl.epd.blockchain.Patient"
-    operation: READ
-    resource: "nl.epd.blockchain.Organisation"
-    action: ALLOW
-}
-
-rule HealthCareProfessionalViewOrganisations {
-    description: "A health care professional is allowed to view all organisations"
-    participant: "nl.epd.blockchain.HealthCareProfessional"
     operation: READ
     resource: "nl.epd.blockchain.Organisation"
     action: ALLOW
@@ -58,6 +52,16 @@ rule PatientMayViewPatients {
     action: ALLOW
 }
 
+/* Health Care Professional */
+
+rule HealthCareProfessionalViewOrganisations {
+    description: "A health care professional is allowed to view all organisations"
+    participant: "nl.epd.blockchain.HealthCareProfessional"
+    operation: READ
+    resource: "nl.epd.blockchain.Organisation"
+    action: ALLOW
+}
+
 rule HealthCareProfessionalViewPatients {
    description: "A health care professional may lookup patients"
    participant: "nl.epd.blockchain.HealthCareProfessional"
@@ -66,7 +70,7 @@ rule HealthCareProfessionalViewPatients {
    action: ALLOW
 }
 
-rule OrganisationMedicalFileReadPermission {
+rule HealthCareProfessionalReadMedicalFile {
    description: "An organisation may view a medical file which they have permission from"
    participant(h): "nl.epd.blockchain.HealthCareProfessional"
    operation: READ
@@ -79,7 +83,7 @@ rule OrganisationMedicalFileReadPermission {
    action: ALLOW
 }
 
-rule OrganisationMedicalFileUpdatePermission {
+rule HealthCareProfessionalUpdateMedicalFile {
    description: "An organisation may view a medical file which they have permission from"
    participant(h): "nl.epd.blockchain.HealthCareProfessional"
    operation: UPDATE
@@ -101,6 +105,8 @@ rule HealthCareProfessional {
     action: ALLOW
 }
 
+/* Mentor (Patient) */
+
 rule MentorViewMedicalFile {
    description: "A mentor may view medical files he has permission to"
    participant(p): "nl.epd.blockchain.Patient"
@@ -112,4 +118,62 @@ rule MentorViewMedicalFile {
     })
    )
    action: ALLOW
+}
+
+/* Government employee */
+
+rule GovernmentEmployeeCRUDOrganisation {
+    description: "A government employee may perform all operations on organisations"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: ALL
+    resource: "nl.epd.blockchain.Organisation"
+    action: ALLOW
+}
+
+rule GovernmentEmployeeCRUDOrganisationType {
+    description: "A government employee may perform all operations on organisation types"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: ALL
+    resource: "nl.epd.blockchain.OrganisationType"
+    action: ALLOW
+}
+
+rule GovernmentEmployeeCreateMedicalFile {
+    description: "A government employee may create a medical file"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: CREATE
+    resource: "nl.epd.blockchain.MedicalFile"
+    action: ALLOW
+}
+
+rule GovernmentEmployeeCreatePatient {
+    description: "A government employee may create a patient"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: CREATE
+    resource: "nl.epd.blockchain.Patient"
+    action: ALLOW
+}
+
+rule GovernmentEmployeeViewPatients {
+    description: "A government employee may view patients"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: READ
+    resource: "nl.epd.blockchain.Patient"
+    action: ALLOW
+}
+
+rule GovernmentCallPatientCreate {
+    description: "A government employee may invoke the PatientCreate transaction"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: CREATE
+    resource: "nl.epd.blockchain.PatientCreate"
+    action: ALLOW
+}
+
+rule GovernmentCRUDHealthCareProfessional {
+    description: "A government employee may invoke the PatientCreate transaction"
+    participant: "nl.epd.blockchain.GovernmentEmployee"
+    operation: ALL
+    resource: "nl.epd.blockchain.HealthCareProfessional"
+    action: ALLOW
 }
